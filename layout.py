@@ -2,7 +2,7 @@ from Html import *
 from Css import *
 from style import *
 
-
+fontSize = 12
 class LayoutBox:
 
   def __init__(self, dimensions, type, children):
@@ -20,7 +20,7 @@ class LayoutBox:
       return self
     # we are block
     else:
-      if len(self.children) == 0 or self.children[-1].type != "anonymous":
+      if len(self.children) == 0 or self.children[-1].type.type != "anonymous":
         self.children.append(
           LayoutBox(dimensionsDefualt(), boxType("anonymous", None), []))
       return self.children[-1]
@@ -34,7 +34,8 @@ class LayoutBox:
       self.layoutInline(containingBlock)
     elif self.type.type == "anonymous":
       #todo add inline anonymous
-      print("no current support for anonymous")
+      print("limted support for inline anoumas")
+      self.layoutAnonymous(containingBlock)
 
   def calculateBlockWidth(self, containingBlock):
     style = self.getStyleNode()
@@ -189,24 +190,62 @@ class LayoutBox:
     self.dimensions.margin.left = marginLeft
 
   def calculateInlineHeight(self):
-    self.dimensions.height = 100
+
+    # height is just the fontsize (i think... no one really knows)
+    self.dimensions.content.height = fontSize; 
+
 
   def layoutInlineChildren(self):
     for child in self.children:
       child.layout(self.dimensions)
 
-      # update the width so each child is laid out below each other
+      # update the width other elements can properly lay themselves out
       self.dimensions.content.width += child.dimensions.marginBox().width
 
   def calculateInlinePos(self, containingBlock):
-    self.dimensions.x = 0
-    self.dimensions.y = 0
+    style = self.getStyleNode()
+    # a zerod value
+    zero = Value(0, "px")
+    self.dimensions.padding.top = style.lookup("padding-top", "padding", zero ).toPx()
+    self.dimensions.padding.bottom = style.lookup("padding-bottom", "padding", zero ).toPx()
+
+    self.dimensions.margin.top = style.lookup("margin-top", "margin", zero ).toPx()
+    self.dimensions.margin.bottom = style.lookup("margin-bottom", "margin", zero ).toPx()
+
+    self.dimensions.border.top = style.lookup("border-top", "border", zero ).toPx()
+    self.dimensions.border.bottom = style.lookup("border-bottom", "border", zero ).toPx()
+
+    # set the x pos
+    self.dimensions.content.x = containingBlock.content.x + containingBlock.content.width + self.dimensions.margin.left + self.dimensions.border.left + self.dimensions.padding.left
+    # position the box below all pervious boxes in the container cause its block
+    self.dimensions.content.y = containingBlock.content.y + self.dimensions.margin.top + self.dimensions.border.top + containingBlock.padding.top
 
   def layoutInline(self, containingBlock):
-    # calculate children first
-    self.layoutInlineChildren()
     self.calculateInlineWidth(containingBlock)
     self.calculateInlinePos(containingBlock)
+    self.calculateInlineHeight()
+    # calculate children first
+    self.layoutInlineChildren()
+
+  def calculateAnonymousPos(self, containingBlock):
+    # blank boxes have no margins or padding so just use default values
+    # set the x pos
+    self.dimensions.content.x = containingBlock.content.x
+    # position the box below all pervious boxes in the container cause its block
+    self.dimensions.content.y = containingBlock.content.height + containingBlock.content.y
+
+    
+  def layoutAnonymousChildren(self):
+    for child in self.children:
+      child.layout(self.dimensions)
+
+      # update the width other elements can properly lay themselves out
+      self.dimensions.content.width += child.dimensions.marginBox().width
+      self.dimensions.content.height = child.dimensions.content.height
+
+  def layoutAnonymous(self, containingBlock):
+    self.calculateAnonymousPos(containingBlock)
+    self.layoutAnonymousChildren()
 
 
 class boxType:
@@ -286,7 +325,7 @@ def buildLayoutTree(node):
     return
   #create children
   for child in node.children:
-    # is text continue on TODO add texr
+    # Text is currently an inline element
     if child.node.text != "":
       continue
     if child.display() == "block":

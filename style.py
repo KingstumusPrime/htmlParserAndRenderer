@@ -2,30 +2,65 @@ from Html import *
 from Css import *
 
 css = """
-* { display: block; padding: 12px; }
-.a { background: #ff0000; }
-.b { background: #ffa500; }
-.c { background: #ffff00; }
-.d { background: #008000; }
-.e { background: #0000ff; }
-.f { background: #4b0082; }
-.g { background: #800080; }
-"""
+html { display: block; padding: 12px;}
+* {
+  margin: 5px;
+}
 
-html = """<div class="a">
-  <div class="b">
-    <div class="c">
-      <div class="d">
-        <div class="e">
-          <div class="f">
-            <div class="g">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+.bun { 
+  display: inline; 
+  background: #DAB399; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 50px;
+}
+.lettuce { 
+  display: inline; 
+  background: #00FF00; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 22px;
+}
+
+.meat { 
+  display: inline; 
+  background: #7F390A; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 55px;
+}
+
+.cheese { 
+  display: inline; 
+  background: #E1EA23; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 20px;
+}
+
+#block {
+  display: block;
+  background: #FF0000;
+  margin-bottom: 200px;
+}"""
+
+html = """
+<html>
+  <div id="block">
+    <div class="bun"></div>
+    <div class="lettuce"></div>
+    <div class="cheese"></div>
+    <div class="meat"></div>
+    <div class="bun"></div>
   </div>
-</div>"""
+  <div id="block">
+    <div class="bun"></div>
+    <div class="lettuce"></div>
+    <div class="cheese"></div>
+    <div class="meat"></div>
+    <div class="bun"></div>
+  </div>
+</html>"""
 
 
 class styledNode:
