@@ -1,10 +1,10 @@
 from Html import *
 from Css import *
 
-css = """
-html { display: block; padding: 12px;}
+
+css = """html { display: block; padding: 12px;}
 * {
-  margin: 5px;
+  margin: 20px;
 }
 
 .bun { 
@@ -40,18 +40,20 @@ html { display: block; padding: 12px;}
 
 #block {
   display: block;
-  background: #FF0000;
+  background: orange;
   margin-bottom: 200px;
-}"""
+}
+"""
 
 html = """
 <html>
   <div id="block">
-    <div class="bun"></div>
+    <div class="bun">HELLO WORLD</div>
     <div class="lettuce"></div>
     <div class="cheese"></div>
     <div class="meat"></div>
     <div class="bun"></div>
+    FISH ARE FRIENDS NOT FOOD!!!!
   </div>
   <div id="block">
     <div class="bun"></div>

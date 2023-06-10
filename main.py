@@ -6,6 +6,8 @@ from layout import *
 def SolidColor(color, rect):
   c = (color["R"], color["G"], color["B"])
   canvas.create_rectangle(rect.x, rect.y, rect.x + rect.width,rect.y + rect.height, fill="#%02x%02x%02x" % c, width=0)
+def genText(rect, text):
+  canvas.create_text(rect.x, rect.y, text=text, anchor="nw")
 
 def buildDisplayList(root):
   list = []
@@ -15,7 +17,8 @@ def buildDisplayList(root):
 def renderLayoutBox(list, box):
   renderBackground(list, box)
   renderBorders(list, box)
-  #TODO render text
+  # basic text rendering
+  renderText(list, box)
 
   for child in box.children:
     renderLayoutBox(list, child)
@@ -54,7 +57,12 @@ def getColor(box, name):
     else:
       return None
   return None
-              
+
+
+def renderText(list, box):
+  if box.type.node != None and box.type.node.node.text != "":
+    list.append(genText(box.dimensions.content, box.type.node.node.text)) 
+    
 screen = Tk()
 screen.title = "htmlExample"
 screen.geometry("500x500")
@@ -67,6 +75,6 @@ print(layoutTree)
 displayList = buildDisplayList(layoutTree)
 print(displayList)
 canvas.pack()
-
+screen.update()
 screen.mainloop()
 

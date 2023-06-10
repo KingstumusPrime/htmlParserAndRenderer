@@ -2,7 +2,8 @@ from Html import *
 from Css import *
 from style import *
 
-fontSize = 12
+fontWidth = 7.35
+fontHeight = 14
 class LayoutBox:
 
   def __init__(self, dimensions, type, children):
@@ -26,7 +27,9 @@ class LayoutBox:
       return self.children[-1]
 
   def layout(self, containingBlock):
-    if self.type.type == "block":
+    if self.type.node != None and self.type.node.node.text != "":
+      self.layoutText(containingBlock)
+    elif self.type.type == "block":
       self.layout_block(containingBlock)
     elif self.type.type == "inline":
       #todo add inline layouts
@@ -192,7 +195,7 @@ class LayoutBox:
   def calculateInlineHeight(self):
 
     # height is just the fontsize (i think... no one really knows)
-    self.dimensions.content.height = fontSize; 
+    self.dimensions.content.height = fontHeight; 
 
 
   def layoutInlineChildren(self):
@@ -218,7 +221,7 @@ class LayoutBox:
     # set the x pos
     self.dimensions.content.x = containingBlock.content.x + containingBlock.content.width + self.dimensions.margin.left + self.dimensions.border.left + self.dimensions.padding.left
     # position the box below all pervious boxes in the container cause its block
-    self.dimensions.content.y = containingBlock.content.y + self.dimensions.margin.top + self.dimensions.border.top + containingBlock.padding.top
+    self.dimensions.content.y = containingBlock.content.y
 
   def layoutInline(self, containingBlock):
     self.calculateInlineWidth(containingBlock)
@@ -247,6 +250,15 @@ class LayoutBox:
     self.calculateAnonymousPos(containingBlock)
     self.layoutAnonymousChildren()
 
+  def layoutText(self, containingBlock):
+    # width is character width * char count
+    self.dimensions.content.width = len(self.type.node.node.text) * fontWidth
+    # width and height are just the font size
+    self.dimensions.content.height = fontHeight
+    # x and y are just defaults
+    self.dimensions.content.x = containingBlock.content.x + containingBlock.content.width
+    # position the box below all pervious boxes in the container cause its block
+    self.dimensions.content.y = containingBlock.content.y
 
 class boxType:
 
@@ -327,8 +339,8 @@ def buildLayoutTree(node):
   for child in node.children:
     # Text is currently an inline element
     if child.node.text != "":
-      continue
-    if child.display() == "block":
+      root.getInlineContainer().children.append(buildLayoutTree(child))
+    elif child.display() == "block":
       root.children.append(buildLayoutTree(child))
     elif child.display() == "inline":
       # give the inline some special treatemnt is the case were an block node has an inline child

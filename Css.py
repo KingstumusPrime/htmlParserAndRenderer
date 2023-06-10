@@ -1,3 +1,4 @@
+from keyWords import colorMap
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 numbers = "1234567890"
 css = """
@@ -175,7 +176,11 @@ class cssParser:
     elif self.nextChar() == "#":
       return (self.parseColor(), None)
     else:
-      return (self.eatText(), None)
+      # if a keyword check if it is really a color name
+      word = self.eatText()
+      if word.lower() in colorMap:
+        word = colorMap[word.lower()]
+      return (word, None)
 
   def parseColor(self):
     self.eat("#")
