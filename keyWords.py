@@ -148,4 +148,5 @@ colorMap = {x.lower() : val for x, val in {
     "WhiteSmoke" :{"R": 245, "G": 245, "B":245},
     "Yellow" :{"R": 255, "G": 255, "B":0},
     "YellowGreen" :{"R": 154, "G": 205, "B":50},
+    "prototype": {"R": 86, "G": 17, "B": 176},
 }.items()}

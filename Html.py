@@ -5,7 +5,7 @@ html = """
   <p></p>
  </div>
 </html>"""
-alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ./"
 
 
 class Node:
@@ -16,6 +16,13 @@ class Node:
     # the type of the node
     self.nodeData = {"tag_name": tageName, "atributes": Atributes}
     self.text = text
+  
+  def isImage(self):
+    if "tag_name" not in self.nodeData or "atributes" not in self.nodeData:
+      return False
+    if self.nodeData["tag_name"] == "img" and "src" in self.nodeData["atributes"]:
+      return True
+    return False
 
 
 def text(data):

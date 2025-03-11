@@ -1,73 +1,31 @@
 from Html import *
 from Css import *
-
+from tkinter import *
+from PIL import ImageTk, Image
 
 css = """html { display: block; padding: 12px;}
-* {
-  margin: 20px;
+
+span {
+  display: inline;
+  background: blue;
 }
 
-.bun { 
-  display: inline; 
-  background: #DAB399; 
-  padding-top: 60px;
-  padding-bottom: 60px;
-  padding-left: 50px;
-}
-.lettuce { 
-  display: inline; 
-  background: #00FF00; 
-  padding-top: 60px;
-  padding-bottom: 60px;
-  padding-left: 22px;
-}
-
-.meat { 
-  display: inline; 
-  background: #7F390A; 
-  padding-top: 60px;
-  padding-bottom: 60px;
-  padding-left: 55px;
-}
-
-.cheese { 
-  display: inline; 
-  background: #E1EA23; 
-  padding-top: 60px;
-  padding-bottom: 60px;
-  padding-left: 20px;
-}
-
-#block {
+div {
   display: block;
-  background: orange;
-  margin-bottom: 200px;
+  background: teal;
 }
 """
 
 html = """
 <html>
-  <div id="block">
-    <div class="bun">HELLO WORLD</div>
-    <div class="lettuce"></div>
-    <div class="cheese"></div>
-    <div class="meat"></div>
-    <div class="bun"></div>
-    FISH ARE FRIENDS NOT FOOD!!!!
-  </div>
-  <div id="block">
-    <div class="bun"></div>
-    <div class="lettuce"></div>
-    <div class="cheese"></div>
-    <div class="meat"></div>
-    <div class="bun"></div>
-  </div>
+  <div>Hello World</div>
+  <span>Hello World</span>
 </html>"""
 
 
 class styledNode:
 
-  def __init__(self, node, specifiedValues, children):
+  def __init__(self, node, specifiedValues, children, image=None):
     # in c++ node is a pointer!
     self.node = node
 
@@ -76,6 +34,8 @@ class styledNode:
 
     # similar to the html tree children are generated recurivly to fill the array
     self.children = children
+
+    self.image = image
 
   def value(self, name):
     return self.specifiedValues[name] if name in self.specifiedValues else None
@@ -95,6 +55,37 @@ class styledNode:
       return self.value(first)
     else:
       return self.value(second) if self.value(second) != None else third
+  def getImage(self):
+    print(self.node.isImage())
+    if self.node.isImage():
+      self.image = loadImage(self.node.nodeData["atributes"]["src"], {"w": self.value("width"), "h": self.value("height")})
+
+
+class ImageOb:
+  def __init__(self, src, baseWidth, baseHeight, obj) -> None:
+    self.src = src
+    self.width = baseWidth
+    self.height = baseHeight
+    self.obj = obj
+
+def loadImage(src, externalDimensions):
+  imageRef = Image.open(src)
+  im = ImageTk.PhotoImage(imageRef)
+  width, height = imageRef.size
+  # ratio of width to height
+  if externalDimensions["w"] != None and externalDimensions["h"] == None:
+    height = externalDimensions["w"].toPx() * height/width
+    width = externalDimensions["w"].toPx() 
+  elif externalDimensions["w"] == None and externalDimensions["h"] != None:
+    height = externalDimensions["h"].toPx()  * width/height
+    width = externalDimensions["h"].toPx() 
+  elif externalDimensions["w"] != None and externalDimensions["h"] != None:
+    height = externalDimensions["h"].toPx() 
+    width = externalDimensions["w"].toPx() 
+  print("LOADING IMAGE: " + src)
+  imageRef = imageRef.resize((int(width), int(height)), Image.Resampling.BILINEAR)
+  im = ImageTk.PhotoImage(imageRef)
+  return ImageOb(src, width, height, im)
 
 
 def getNodeData(nodeData):
@@ -148,10 +139,12 @@ def specifiedValues(nodeData, styleSheet):
 
 # takes in a dom tree (see html.py) and a css tree (see css.py) and smashes they together
 def styleTree(root, styleSheet):
-  return styledNode(
+  node = styledNode(
     root,
     specifiedValues(root.nodeData, styleSheet) if root.text == "" else {},
     [styleTree(child, styleSheet) for child in root.children])
+  node.getImage()
+  return node
 
 
 def parseStyles():

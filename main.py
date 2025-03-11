@@ -14,11 +14,15 @@ def buildDisplayList(root):
   renderLayoutBox(list, root)
   return list
 
+def drawImage(box, img):
+  canvas.create_image(box.x, box.y, anchor=NW, image=img.obj)
 def renderLayoutBox(list, box):
   renderBackground(list, box)
   renderBorders(list, box)
   # basic text rendering
   renderText(list, box)
+  # basic image rendering
+  renderImages(list, box)
 
   for child in box.children:
     renderLayoutBox(list, child)
@@ -62,6 +66,10 @@ def getColor(box, name):
 def renderText(list, box):
   if box.type.node != None and box.type.node.node.text != "":
     list.append(genText(box.dimensions.content, box.type.node.node.text)) 
+
+def renderImages(list, box):
+  if box.type.node != None and  box.type.node.image != None:
+    list.append(drawImage(box.dimensions.content, box.type.node.image))
     
 screen = Tk()
 screen.title = "htmlExample"

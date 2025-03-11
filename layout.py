@@ -2,7 +2,7 @@ from Html import *
 from Css import *
 from style import *
 
-fontWidth = 7.35
+fontWidth = 6
 fontHeight = 14
 class LayoutBox:
 
@@ -45,6 +45,8 @@ class LayoutBox:
 
     # width has a value of auto if none is given
     width = "auto" if style.value("width") == None else style.value("width")
+    if style.image != None:
+      width = style.image.width
     # a zerod value
     zero = Value(0, "px")
 
@@ -149,8 +151,9 @@ class LayoutBox:
   def calculateBlockHeight(self):
     # if the heigth is an explict lenght use that otherwise use exact length
     # otherwise just use keep the value set by layout block children
-
-    if self.getStyleNode().value("height") != None:
+    if self.getStyleNode().image != None:
+      self.dimensions.content.height = self.getStyleNode().image.height
+    elif self.getStyleNode().value("height") != None:
       self.dimensions.content.height = self.getStyleNode().value(
         "height").toPx()
 
@@ -191,6 +194,9 @@ class LayoutBox:
 
     self.dimensions.margin.right = marginRight
     self.dimensions.margin.left = marginLeft
+
+    if style.image != None:
+      self.dimensions.content.width = style.image.width
 
   def calculateInlineHeight(self):
 
