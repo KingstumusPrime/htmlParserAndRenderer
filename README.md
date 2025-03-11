@@ -4,3 +4,4 @@ This is a project that I did hoping to learn more about how search engines and b
 
 # Gallery
 
+![HTML](https://github.com/user-attachments/assets/65f33cf9-015c-47c7-80ea-28b97aeb7449)
