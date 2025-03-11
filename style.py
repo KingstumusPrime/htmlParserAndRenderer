@@ -4,22 +4,72 @@ from tkinter import *
 from PIL import ImageTk, Image
 
 css = """html { display: block; padding: 12px;}
-
-span {
-  display: inline;
-  background: blue;
+* {
+  margin: 20px;
 }
 
-div {
+.bun { 
+  display: inline; 
+  background: #DAB399; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 50px;
+}
+.lettuce { 
+  display: inline; 
+  background: #00FF00; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 22px;
+}
+
+.meat { 
+  display: inline; 
+  background: #7F390A; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 55px;
+}
+
+.cheese { 
+  display: inline; 
+  background: #E1EA23; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 20px;
+}
+
+#block {
   display: block;
-  background: teal;
+  background: #FF0000;
+  margin-bottom: 200px;
 }
+
+img {
+  width: 150px;
+  height: 150px;
+}
+
 """
 
 html = """
 <html>
-  <div>Hello World</div>
-  <span>Hello World</span>
+  <div id="block">
+    <div class="bun">HELLO WORLD</div>
+    <div class="lettuce"></div>
+    <div class="cheese"></div>
+    <div class="meat"></div>
+    <div class="bun"></div>
+    Hello world
+  </div>
+  <div id="block">
+    <div class="bun"></div>
+    <div class="lettuce"></div>
+    <div class="cheese"></div>
+    <div class="meat"></div>
+    <div class="bun"></div>
+  </div>
+  <img src="./htmlPic.jpg"></img>
 </html>"""
 
 

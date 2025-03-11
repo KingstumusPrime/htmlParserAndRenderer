@@ -11,6 +11,48 @@ p, div {
   color: #0EFA00;
   display: block;
 }
+
+html { display: block; padding: 12px;}
+* {
+  margin: 20px;
+}
+
+.bun { 
+  display: inline; 
+  background: #DAB399; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 50px;
+}
+.lettuce { 
+  display: inline; 
+  background: #00FF00; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 22px;
+}
+
+.meat { 
+  display: inline; 
+  background: #7F390A; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 55px;
+}
+
+.cheese { 
+  display: inline; 
+  background: #E1EA23; 
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-left: 20px;
+}
+
+#block {
+  display: block;
+  background: #FF0000;
+  margin-bottom: 200px;
+}
 """
 
 units = ["px"]
